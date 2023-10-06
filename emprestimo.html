@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empréstimo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap"); 
+        body {
+            font-family:  "Raleway", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #ff0000; 
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff0000; 
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ff0000; 
+            border-radius: 5px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px); 
+        }
+
+        button {
+            background-color: #ff0000; /* Verde */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px; /* Arredondar as bordas */
+            cursor: pointer;
+            display: block; /* Tornar o botão um bloco para centralizá-lo */
+            margin: 0 auto; /* Centralizar o botão horizontalmente */
+        }
+
+        button:hover{
+            background-color:#4CAF50 ;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 2px solid #ff0000; /* Vermelho */
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ff0000; /* Vermelho */
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Empréstimo de Livros</h1>
+    <div class="container">
+        <form id="emprestimoForm">
+            <label for="nome">Nome de Usuário:</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="titulo">Título do Livro:</label>
+            <select id="titulo" name="titulo" required>
+                <option value="Daisy Jones">Daisy Jones</option>
+                <option value="Todo esse tempo">Todo esse tempo</option>
+                <option value="Príncipe Cruel">Príncipe Cruel</option>
+            </select>
+
+            <label for="autor">Autor do Livro:</label>
+            <input type="text" id="autor" name="autor" required>
+
+            <label for="data_emprestimo">Data de Empréstimo:</label>
+            <input type="text" id="data_emprestimo" name="data_emprestimo" required placeholder="Selecione a Data">
+            
+            <label for="data_devolucao">Data de Devolução:</label>
+            <input type="text" id="data_devolucao" name="data_devolucao" readonly>
+
+            <button type="submit">Registrar Empréstimo</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Data de Empréstimo</th>
+                <th>Data de Devolução</th>
+            </tr>
+        </thead>
+        <tbody id="emprestimoTableBody">
+            <!-- Os empréstimos serão adicionados aqui dinamicamente -->
+        </tbody>
+    </table>
+
+    <script>
+        flatpickr("#data_emprestimo", {
+            dateFormat: "d/m/Y",
+            onClose: function (selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    const dataDevolucao = new Date(selectedDates[0]);
+                    dataDevolucao.setDate(dataDevolucao.getDate() + 7);
+
+                    const dd = String(dataDevolucao.getDate()).padStart(2, '0');
+                    const mm = String(dataDevolucao.getMonth() + 1).padStart(2, '0');
+                    const yyyy = dataDevolucao.getFullYear();
+
+                    const dataDevolucaoStr = dd + '/' + mm + '/' + yyyy;
+                    document.getElementById("data_devolucao").value = dataDevolucaoStr;
+                }
+            }
+        });
+
+        document.getElementById("emprestimoForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nome = document.getElementById("nome").value;
+            const nomesPermitidos = ["Isabelle", "Maria Clara", "Vitor", "Felipe"];
+
+            if (!nomesPermitidos.includes(nome)) {
+                alert("Nome inválido. Por favor, insira um nome já cadastrado.");
+                return;
+            }
+
+            const titulo = document.getElementById("titulo").value;
+            const autor = document.getElementById("autor").value;
+            const data_emprestimo = document.getElementById("data_emprestimo").value;
+            const data_devolucao = document.getElementById("data_devolucao").value;
+
+            const emprestimoTableBody = document.getElementById("emprestimoTableBody");
+            const newRow = emprestimoTableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            cell1.innerHTML = nome;
+            cell2.innerHTML = titulo;
+            cell3.innerHTML = autor;
+            cell4.innerHTML = data_emprestimo;
+            cell5.innerHTML = data_devolucao;
+
+            document.getElementById("nome").value = "";
+            document.getElementById("autor").value = "";
+            document.getElementById("data_emprestimo").value = "";
+            document.getElementById("data_devolucao").value = "";
+        });
+    </script>
+</body>
+</html>

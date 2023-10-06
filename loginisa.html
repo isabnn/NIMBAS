@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+</head>
+
+<body>
+    <div id="listOfBooksSearch">
+        <h3>Busque um livro</h3>
+        <label for="bookNameSearch">Digite o livro que deseja procurar:</label>
+        <input type="text" name="bookNameSearch" id="bookNameSearch">
+        <button id="btnSearch">Buscar</button>
+        <div id="foundBooks"></div>
+      </div>
+  
+</body>
+
+<script>
+     function findBook() {
+      return allBooks.findIndex((elem) => elem.bookName === (event.target.parentNode.className))
+    }
+
+    function showError(bookName) {
+      const contentModel = document.querySelector("#contentModel")
+      modalTitle.innerHTML = `Livro "${bookName}" não encontrado!`
+      txtSynopsis.innerHTML = ""
+      contentModel.style.width = "50%"
+      modal.style.display = "block"
+    }
+</script>
+</html>
